@@ -1,0 +1,14 @@
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\bin\Debug\net10.0\Client.exe
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\bin\Debug\net10.0\Client.deps.json
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\bin\Debug\net10.0\Client.runtimeconfig.json
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\bin\Debug\net10.0\Client.dll
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\bin\Debug\net10.0\Client.pdb
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\Client.GeneratedMSBuildEditorConfig.editorconfig
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\Client.AssemblyInfoInputs.cache
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\Client.AssemblyInfo.cs
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\Client.csproj.CoreCompileInputs.cache
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\Client.dll
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\refint\Client.dll
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\Client.pdb
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\Client.genruntimeconfig.cache
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\ref\Client.dll
