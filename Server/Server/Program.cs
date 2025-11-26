@@ -15,7 +15,7 @@ class ServerRaw
         Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         serverSocket.Bind(new IPEndPoint(IPAddress.Any, port));
         serverSocket.Listen(10);
-        Console.WriteLine($"Servidor rodando na porta {port}. Chunk de dados: {MAX_DATA_SIZE} bytes.");
+        Console.WriteLine($"Servidor rodando...");
 
         while (true)
         {

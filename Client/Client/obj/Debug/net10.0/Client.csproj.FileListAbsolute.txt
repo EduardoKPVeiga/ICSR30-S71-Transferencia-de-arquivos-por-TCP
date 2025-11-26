@@ -12,3 +12,4 @@ C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Clie
 C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\Client.pdb
 C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\Client.genruntimeconfig.cache
 C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\ref\Client.dll
+C:\UTFPR\redes_de_computadores\ICSR30-S71-Transferencia-de-arquivos-por-TCP\Client\Client\obj\Debug\net10.0\Client.sourcelink.json

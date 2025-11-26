@@ -83,7 +83,7 @@ class ClientRaw
     {
         while (true)
         {
-            Console.Write("Digite o IP do servidor (ex: 127.0.0.1): ");
+            Console.Write("Digite o IP do servidor: ");
             string input = Console.ReadLine();
             if (IPAddress.TryParse(input, out IPAddress ip))
                 return ip;
@@ -96,7 +96,7 @@ class ClientRaw
     {
         while (true)
         {
-            Console.Write("Digite a Porta do servidor (ex: 2048): ");
+            Console.Write("Digite a Porta do servidor: ");
             string input = Console.ReadLine();
             if (int.TryParse(input, out int port) && port > 0 && port <= 65535)
                 return port;
