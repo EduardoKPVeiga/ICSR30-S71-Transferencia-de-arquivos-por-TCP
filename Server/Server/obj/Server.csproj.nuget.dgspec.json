@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\epont\\source\\repos\\Server\\Server\\Server.csproj": {}
+    "C:\\UTFPR\\redes_de_computadores\\ICSR30-S71-Transferencia-de-arquivos-por-TCP\\Server\\Server\\Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\epont\\source\\repos\\Server\\Server\\Server.csproj": {
+    "C:\\UTFPR\\redes_de_computadores\\ICSR30-S71-Transferencia-de-arquivos-por-TCP\\Server\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\epont\\source\\repos\\Server\\Server\\Server.csproj",
+        "projectUniqueName": "C:\\UTFPR\\redes_de_computadores\\ICSR30-S71-Transferencia-de-arquivos-por-TCP\\Server\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "C:\\Users\\epont\\source\\repos\\Server\\Server\\Server.csproj",
+        "projectPath": "C:\\UTFPR\\redes_de_computadores\\ICSR30-S71-Transferencia-de-arquivos-por-TCP\\Server\\Server\\Server.csproj",
         "packagesPath": "C:\\Users\\epont\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\epont\\source\\repos\\Server\\Server\\obj\\",
+        "outputPath": "C:\\UTFPR\\redes_de_computadores\\ICSR30-S71-Transferencia-de-arquivos-por-TCP\\Server\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\epont\\AppData\\Roaming\\NuGet\\NuGet.Config",
