@@ -6,7 +6,7 @@ class ClientRaw
 {
     static bool running = true;
 
-    static Dictionary<string, (int recebidos, int total)> downloadState = new Dictionary<string, (int, int)>();
+    static Dictionary<string, (int sequence_number, int total)> downloadState = new Dictionary<string, (int, int)>();
 
     static void Main(string[] args)
     {
@@ -117,8 +117,8 @@ class ClientRaw
                 if (typeBuf[0] == 0x02)
                 {
                     ushort len = BitConverter.ToUInt16(ReadExact(s, 2), 0);
-                    string texto = Encoding.UTF8.GetString(ReadExact(s, len));
-                    Console.WriteLine($"\r[CHAT] {texto}");
+                    string text = Encoding.UTF8.GetString(ReadExact(s, len));
+                    Console.WriteLine($"\r[CHAT] {text}");
                     Console.Write("> ");
                 }
                 else if (typeBuf[0] == 0x01)
@@ -137,11 +137,11 @@ class ClientRaw
     {
         int nameLen = ReadExact(s, 1)[0];
         string fileName = Encoding.UTF8.GetString(ReadExact(s, nameLen));
-        int counterOrTotal = BitConverter.ToInt32(ReadExact(s, 4), 0);
+        int ack = BitConverter.ToInt32(ReadExact(s, 4), 0);
 
         if (!downloadState.ContainsKey(fileName))
         {
-            int totalPackets = counterOrTotal;
+            int totalPackets = ack;
             int fileSize = BitConverter.ToInt32(ReadExact(s, 4), 0);
 
             downloadState[fileName] = (0, totalPackets);
@@ -152,17 +152,23 @@ class ClientRaw
         }
         else
         {
-            var estado = downloadState[fileName];
+            var state = downloadState[fileName];
 
-            if (estado.recebidos < estado.total)
+            if (state.sequence_number < state.total)
             {
                 ushort dataSize = BitConverter.ToUInt16(ReadExact(s, 2), 0);
                 byte[] data = ReadExact(s, dataSize);
 
+                if (ack != state.sequence_number)
+                {
+                    Console.WriteLine($"\n[ERRO] Pacote fora de ordem. Esperado: {state.sequence_number}, Recebido: {ack}. Ignorado.");
+                    return;
+                }
+
                 using (var fs = new FileStream(fileName, FileMode.Append))
                     fs.Write(data, 0, data.Length);
 
-                downloadState[fileName] = (estado.recebidos + 1, estado.total);
+                downloadState[fileName] = (ack + 1, state.total);
             }
             else
             {
@@ -179,12 +185,12 @@ class ClientRaw
     static byte[] ReadExact(Socket s, int size)
     {
         byte[] buf = new byte[size];
-        int offset = 0;
-        while (offset < size)
+        int position = 0;
+        while (position < size)
         {
-            int r = s.Receive(buf, offset, size - offset, SocketFlags.None);
+            int r = s.Receive(buf, position, size - position, SocketFlags.None);
             if (r == 0) throw new Exception("Socket fechado durante leitura");
-            offset += r;
+            position += r;
         }
         return buf;
     }

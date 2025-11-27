@@ -32,11 +32,18 @@ class ServerRaw
             while (true)
             {
                 byte[] typeBuf = new byte[1];
-                if (client.Receive(typeBuf) == 0) break;
-
-                if (typeBuf[0] == 0x00) break;
-                if (typeBuf[0] == 0x02) HandleChat(client);
-                if (typeBuf[0] == 0x01) HandleFileRequest(client);
+                if (client.Receive(typeBuf) == 0 || typeBuf[0] == 0x00)
+                {
+                    break;
+                }
+                else if (typeBuf[0] == 0x01)
+                {
+                    HandleFileRequest(client);
+                }
+                else if (typeBuf[0] == 0x02)
+                {
+                    HandleChat(client);
+                }
             }
         }
         catch { }
@@ -54,11 +61,6 @@ class ServerRaw
         byte[] msgBuf = ReadExact(client, msgLen);
 
         Console.WriteLine($"[CHAT]: {Encoding.UTF8.GetString(msgBuf)}");
-
-        List<byte> pkt = new List<byte> { 0x02 };
-        pkt.AddRange(lenBuf);
-        pkt.AddRange(msgBuf);
-        Broadcast(pkt.ToArray(), client);
     }
 
     static void HandleFileRequest(Socket client)
@@ -67,7 +69,10 @@ class ServerRaw
         byte[] nameBuf = ReadExact(client, nameLenBuf[0]);
         string fileName = Encoding.UTF8.GetString(nameBuf);
 
-        if (!File.Exists(fileName)) return;
+        if (!File.Exists(fileName))
+        {
+            return;
+        }
 
         SendFileSequence(client, fileName, nameBuf);
     }
@@ -87,10 +92,10 @@ class ServerRaw
         using (FileStream fs = File.OpenRead(filePath))
         {
             byte[] buffer = new byte[MAX_DATA_SIZE];
-            int bytesRead;
             int packetCount = 1;
 
-            while ((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0)
+            int bytesRead = fs.Read(buffer, 0, buffer.Length);
+            while (bytesRead > 0)
             {
                 List<byte> pkt = new List<byte> { 0x01, (byte)nameRaw.Length };
                 pkt.AddRange(nameRaw);
@@ -104,6 +109,8 @@ class ServerRaw
                 client.Send(pkt.ToArray());
                 packetCount++;
                 Thread.Sleep(5);
+
+                bytesRead = fs.Read(buffer, 0, buffer.Length);
             }
         }
 
@@ -130,16 +137,14 @@ class ServerRaw
         return buf;
     }
 
-    static void Broadcast(byte[] data, Socket sender)
-    {
-        lock (lockObj)
-        {
-            foreach (var c in clients) if (c != sender && c.Connected) c.Send(data);
-        }
-    }
-
     static byte[] CalculateSHA256Bytes(string file)
     {
-        using (var sha = SHA256.Create()) using (var s = File.OpenRead(file)) return sha.ComputeHash(s);
+        using (var sha = SHA256.Create())
+        {
+            using (var s = File.OpenRead(file))
+            {
+                return sha.ComputeHash(s);
+            }
+        }
     }
 }
