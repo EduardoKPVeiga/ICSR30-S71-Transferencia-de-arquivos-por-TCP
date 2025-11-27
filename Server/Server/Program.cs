@@ -71,6 +71,14 @@ class ServerRaw
 
         if (!File.Exists(fileName))
         {
+            Console.WriteLine($"[LOG] Arquivo não encontrado solicitado: {fileName}");
+
+            List<byte> response = new List<byte> { 0x01, (byte)nameBuf.Length };
+            response.AddRange(nameBuf);
+            response.AddRange(BitConverter.GetBytes(0));
+            response.AddRange(BitConverter.GetBytes(0));
+
+            client.Send(response.ToArray());
             return;
         }
 

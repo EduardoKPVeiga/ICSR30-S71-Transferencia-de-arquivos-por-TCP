@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 
 class ClientRaw
@@ -62,7 +63,7 @@ class ClientRaw
                     p.AddRange(nome);
 
                     client.Send(p.ToArray());
-                    Console.WriteLine($"Solicitação de download enviada para: {fileName}");
+                    Console.WriteLine($"{fileName} solicitação de download enviada");
                 }
                 else
                 {
@@ -137,6 +138,7 @@ class ClientRaw
     {
         int nameLen = ReadExact(s, 1)[0];
         string fileName = Encoding.UTF8.GetString(ReadExact(s, nameLen));
+
         int ack = BitConverter.ToInt32(ReadExact(s, 4), 0);
 
         if (!downloadState.ContainsKey(fileName))
@@ -144,7 +146,14 @@ class ClientRaw
             int totalPackets = ack;
             int fileSize = BitConverter.ToInt32(ReadExact(s, 4), 0);
 
-            downloadState[fileName] = (0, totalPackets);
+            if (totalPackets == 0)
+            {
+                Console.WriteLine($"\r[ERRO] Arquivo '{fileName}' não encontrado no servidor.");
+                Console.Write("> ");
+                return;
+            }
+
+            downloadState[fileName] = (1, totalPackets);
             File.WriteAllBytes(fileName, new byte[0]);
 
             Console.WriteLine($"\r[ARQUIVO] Iniciando download: '{fileName}' ({fileSize} bytes)");
@@ -154,28 +163,46 @@ class ClientRaw
         {
             var state = downloadState[fileName];
 
-            if (state.sequence_number < state.total)
+            if (state.sequence_number <= state.total)
             {
                 ushort dataSize = BitConverter.ToUInt16(ReadExact(s, 2), 0);
                 byte[] data = ReadExact(s, dataSize);
 
                 if (ack != state.sequence_number)
                 {
-                    Console.WriteLine($"\n[ERRO] Pacote fora de ordem. Esperado: {state.sequence_number}, Recebido: {ack}. Ignorado.");
                     return;
                 }
 
                 using (var fs = new FileStream(fileName, FileMode.Append))
                     fs.Write(data, 0, data.Length);
 
+                Console.WriteLine($"[ARQUIVO] Recebido pacote {ack}/{state.total} do arquivo '{fileName}'");
+
                 downloadState[fileName] = (ack + 1, state.total);
             }
             else
             {
                 byte[] serverHash = ReadExact(s, 32);
-                string hashStr = BitConverter.ToString(serverHash).Replace("-", "").ToLower();
 
-                Console.WriteLine($"\r[ARQUIVO] Download concluído: '{fileName}'. Hash: {hashStr}");
+                byte[] localHash = CalculateSHA256Bytes(fileName);
+
+                if (serverHash.SequenceEqual(localHash))
+                {
+                    string hashStr = BitConverter.ToString(serverHash).Replace("-", "").ToLower();
+                    Console.WriteLine($"\r[ARQUIVO] Download concluído e VERIFICADO: '{fileName}'. Hash: {hashStr}");
+                }
+                else
+                {
+                    string sHash = BitConverter.ToString(serverHash).Replace("-", "").ToLower();
+                    string lHash = BitConverter.ToString(localHash).Replace("-", "").ToLower();
+
+                    Console.WriteLine($"\r[ERRO] O arquivo '{fileName}' está corrompido.");
+                    Console.WriteLine($"Hash Servidor: {sHash}");
+                    Console.WriteLine($"Hash Local:    {lHash}");
+
+                    File.Delete(fileName);
+                }
+
                 downloadState.Remove(fileName);
                 Console.Write("> ");
             }
@@ -193,5 +220,16 @@ class ClientRaw
             position += r;
         }
         return buf;
+    }
+
+    static byte[] CalculateSHA256Bytes(string file)
+    {
+        using (var sha = SHA256.Create())
+        {
+            using (var s = File.OpenRead(file))
+            {
+                return sha.ComputeHash(s);
+            }
+        }
     }
 }
